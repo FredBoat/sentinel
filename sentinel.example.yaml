@@ -17,3 +17,12 @@ spring:
     port: 5672
     username: "guest"
     password: "guest"
+
+logging:
+  file:             './logs/sentinel.log'
+  file.max-history: 30
+  file.max-size:    1GB
+
+  level:
+    root:           INFO
+    com.fredboat:   DEBUG
