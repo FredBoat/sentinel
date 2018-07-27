@@ -29,9 +29,9 @@ class RabbitQueuesConfig {
     fun requestBinding(
             @Qualifier("requestExchange") requestExchange: DirectExchange,
             @Qualifier("requestQueue") requestQueue: Queue,
-            @Qualifier("sentinelId") key: String
+            key: RoutingKey
     ): Binding {
-        return BindingBuilder.bind(requestQueue).to(requestExchange).with(key)
+        return BindingBuilder.bind(requestQueue).to(requestExchange).with(key.id)
     }
 
     /* Fanout */

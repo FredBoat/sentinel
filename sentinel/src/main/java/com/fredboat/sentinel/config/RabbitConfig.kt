@@ -31,11 +31,11 @@ class RabbitConfig {
     }
 
     @Bean
-    fun sentinelId(): String {
+    fun routingKey(): RoutingKey {
         val rand = UUID.randomUUID().toString().replace("-", "").substring(0, 8)
         val id = "${InetAddress.getLocalHost().hostName}-$rand"
         log.info("Unique identifier for this session: $id")
-        return id
+        return RoutingKey(id)
     }
 
     @Bean
