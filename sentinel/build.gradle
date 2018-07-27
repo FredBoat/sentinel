@@ -8,6 +8,7 @@ apply plugin: 'kotlin'
 apply plugin: "kotlin-spring"
 apply plugin: "maven"
 apply plugin: "maven-publish"
+apply plugin: 'net.ltgt.apt'
 
 dependencies {
     compile project(":sentinel-shared")
@@ -15,6 +16,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.springframework.boot:spring-boot-starter-web:$bootVersion"
     compile "org.springframework.amqp:spring-rabbit:$amqpVersion"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:$bootVersion"
     compile "com.google.code.gson:gson:$gsonVersion"
     compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonKotlinVersion"
     compile "ch.qos.logback:logback-classic:$logbackVersion"
@@ -68,6 +70,9 @@ bootJar {
 
 // Makes sure JitPack packages the jar
 install.dependsOn bootJar
+
+//spring boot annotations processor
+compileJava.dependsOn processResources
 
 test {
     useJUnitPlatform()
