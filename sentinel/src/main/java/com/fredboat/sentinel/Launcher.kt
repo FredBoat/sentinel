@@ -2,14 +2,12 @@ package com.fredboat.sentinel
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.WebApplicationType
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 import org.springframework.context.annotation.ComponentScan
 
 @SpringBootApplication
-@EnableAutoConfiguration
 @ComponentScan(basePackages = ["com.fredboat"])
 class Launcher : ApplicationContextAware {
     override fun setApplicationContext(applicationContext: ApplicationContext) {
@@ -21,7 +19,7 @@ fun main(args: Array<String>) {
     System.setProperty("spring.config.name", "sentinel")
     System.setProperty("spring.config.title", "sentinel")
     val app = SpringApplication(Launcher::class.java)
-    app.webApplicationType = WebApplicationType.NONE
+    app.webApplicationType = WebApplicationType.SERVLET
     app.run(*args)
 }
 
