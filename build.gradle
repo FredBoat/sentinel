@@ -1,5 +1,6 @@
 buildscript {
     ext {
+        gradleGitVersion = '1.5.1'
         kotlin_version = '1.2.51'
         bootVersion = '2.0.1.RELEASE'
         aptVersion = '0.17'
@@ -11,6 +12,7 @@ buildscript {
         maven { url 'http://repo.spring.io/plugins-release' }
     }
     dependencies {
+        classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:${gradleGitVersion}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:$bootVersion"
         classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
@@ -59,6 +61,7 @@ ext {
     gsonVersion = '2.8.2'
     jacksonKotlinVersion = "2.9.+"
     logbackVersion = "1.2.3"
+    sentryVersion = '1.7.5'
     prometheusClientVersion = "0.3.0"
 
     //testing deps

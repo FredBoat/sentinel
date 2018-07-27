@@ -9,6 +9,12 @@ sentinel:
 
   shardCount: 1 # The total number of shards of your entire bot
 
+sentry:
+  dsn: ""
+#  tags:
+#    some_key: some_value
+#    another_key: another_value
+
 spring:
   rabbitmq:
     # These default settings should work without configuring the server
