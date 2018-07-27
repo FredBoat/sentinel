@@ -27,6 +27,7 @@ dependencies {
     compile group: 'io.prometheus', name: 'simpleclient_hotspot', version: prometheusClientVersion
     compile group: 'io.prometheus', name: 'simpleclient_logback', version: prometheusClientVersion
     compile group: 'io.prometheus', name: 'simpleclient_guava', version: prometheusClientVersion
+    compile group: 'io.prometheus', name: 'simpleclient_servlet', version: prometheusClientVersion
 
     //tests
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitVersion
