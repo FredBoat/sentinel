@@ -134,7 +134,11 @@ class FederatedSessionControlTest {
                 assertFalse("Node must not be started twice", nodesStarted[i])
                 if (i > 0) {
                     nodesStarted.subList(0, i-1).forEachIndexed { j, bool ->
-                        assertTrue("Attempt to run $i before $j", bool)
+                        if (i == 8) { //8 is the home shard id of FBH with a total of 9 shards, it should start first
+                            assertFalse("The node holding the home guild should start first", hasFirstNodeRun)
+                        } else {
+                            assertTrue("Attempt to run $i before $j", bool)
+                        }
                     }
                 }
                 if(hasFirstNodeRun) assertTrue(

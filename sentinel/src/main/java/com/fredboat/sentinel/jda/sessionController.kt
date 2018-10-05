@@ -19,6 +19,8 @@ private val log: Logger = LoggerFactory.getLogger(FederatedSessionControl::class
 private const val BROADCAST_INTERVAL = 5_000
 /** Status updates older than this timeout are ignored to prevent ghosts */
 private const val STATUS_TIMEOUT = 12_000
+/** Discord guild id of FredBoat Hangout */
+private const val homeGuildId = 174820236481134592L
 
 @Service
 @RabbitListener(queues = ["#{sessionsQueue.name}"], errorHandler = "rabbitListenerErrorHandler")
@@ -111,12 +113,27 @@ class FederatedSessionControl(
      * Set must not be empty
      */
     private fun getNextNode() = localQueue.reduceEntries(1) { acc, entry ->
-        return@reduceEntries if (entry.key < acc.key) entry else acc
+        return@reduceEntries if (entry.key < acc.key || isHomeShard(entry.value)) entry else acc
     }.value
 
+    private fun isHomeShard(node: SessionConnectNode): Boolean {
+        return homeShardId() == node.shardInfo.shardId
+    }
+
+    private fun homeShardId(): Int {
+        return ((homeGuildId shr 22) % jdaProps.shardCount).toInt()
+    }
+
+    private fun isHomeShardOurs(): Boolean {
+        return jdaProps.shardStart <= homeShardId() && homeShardId() <= jdaProps.shardEnd
+    }
+
     private fun isWaitingOnOtherInstances(): Boolean {
-        if (jdaProps.shardStart == 0) return false // We have first priority
-        for (id in 0..(jdaProps.shardStart - 1)) {
+        // if we manage the home shard and it needs connecting we have priority
+        if (isHomeShardOurs() && localQueue.containsKey(homeShardId())) {
+            return false
+        }
+        for (id in 0..(jdaProps.shardCount - 1)) {
             sessionInfo[id]?.let {
                 // Is this shard queued and is it not too old?
                 if (it.messageTime + STATUS_TIMEOUT < System.currentTimeMillis()) {
@@ -124,7 +141,8 @@ class FederatedSessionControl(
                     sessionInfo.remove(id)
                     return@let
                 }
-                if (it.queued) return true
+                if (it.queued && id < jdaProps.shardStart) return true  // a shard below the ones managed by us is queued
+                if (it.queued && id == homeShardId()) return true       // the home shard is queued on one of the other nodes
             }
         }
         return false
