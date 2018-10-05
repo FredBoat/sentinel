@@ -29,8 +29,8 @@ apply plugin: "kotlin-spring"
 apply plugin: "maven"
 apply plugin: "maven-publish"
 
-sourceCompatibility = 10
-targetCompatibility = 10
+sourceCompatibility = 11
+targetCompatibility = 11
 
 compileJava.dependsOn 'clean'
 compileJava.options.encoding = 'UTF-8'
